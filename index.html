@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Asha!</title>
+    <style>
+        :root {
+            --bg-color: #2a1b24;
+            --card-bg: #3d2735;
+            --accent-pink: #ff85a2;
+            --text-color: #f3e5ab;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--bg-color);
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Tombol Musik Melayang */
+        .music-control {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 999;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-pink);
+            color: var(--white);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .screen { display: none; }
+        .active { display: block; }
+
+        /* --- 1. PIN Screen --- */
+        .pin-box input {
+            width: 120px;
+            padding: 10px;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 10px;
+            border: 2px solid var(--accent-pink);
+            background: transparent;
+            color: var(--white);
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+        }
+
+        .btn {
+            background-color: var(--accent-pink);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        /* --- 2. Gift Screen --- */
+        .gift-box {
+            font-size: 80px;
+            cursor: pointer;
+            animation: bounce 1.5s infinite;
+            margin: 30px 0;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* --- 3. Main Content --- */
+        h1, h2 { color: var(--accent-pink); }
+        
+        .flower-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-size: 40px;
+        }
+        .flower { cursor: pointer; transition: 0.2s; }
+        .flower:hover { transform: scale(1.2); }
+
+        .flower-message {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            min-height: 50px;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .letter {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: left;
+            line-height: 1.6;
+            margin: 25px 0;
+            font-size: 14px;
+        }
+
+        .polaroid-frame {
+            background: white;
+            padding: 10px 10px 25px 10px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin: 15px 0;
+            color: #333;
+        }
+        .polaroid-frame img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .jar-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+        }
+
+        /* --- Animasi Buket Bunga Besar --- */
+        .bouquet-wrapper {
+            margin-top: 40px;
+            padding: 20px 10px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .large-bouquet {
+            position: relative;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-bottom: 10px;
+            animation: floatBouquet 3s ease-in-out infinite;
+        }
+
+        .flower-item {
+            position: absolute;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        /* Mawar */
+        .rose-1 { font-size: 55px; bottom: 65px; left: calc(50% - 70px); transform: rotate(-18deg); animation: pulseBloom 2.8s ease-in-out infinite alternate; }
+        .rose-2 { font-size: 55px; bottom: 65px; right: calc(50% - 70px); transform: rotate(18deg); animation: pulseBloom 3.2s ease-in-out infinite alternate; }
+        .rose-main { font-size: 65px; bottom: 75px; left: calc(50% - 32px); z-index: 3; animation: pulseBloom 2.5s ease-in-out infinite alternate; }
+
+        /* Tulip */
+        .tulip-1 { font-size: 50px; bottom: 95px; left: calc(50% - 45px); z-index: 2; animation: floatTulip 3.5s ease-in-out infinite; }
+        .tulip-2 { font-size: 50px; bottom: 95px; right: calc(50% - 45px); z-index: 2; animation: floatTulip 3.8s ease-in-out infinite; }
+
+        /* Bunga Matahari */
+        .sunflower-1 { font-size: 48px; bottom: 50px; left: calc(50% - 95px); transform: rotate(-30deg); animation: floatSunflower 3s ease-in-out infinite; }
+        .sunflower-2 { font-size: 48px; bottom: 50px; right: calc(50% - 95px); transform: rotate(30deg); animation: floatSunflower 3.3s ease-in-out infinite; }
+
+        .bouquet-wrap {
+            font-size: 80px;
+            position: absolute;
+            bottom: 0px;
+            z-index: 4;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+        }
+
+        .sparkle-1 { position: absolute; font-size: 20px; top: 10px; left: 20%; animation: blink 1.5s infinite alternate; }
+        .sparkle-2 { position: absolute; font-size: 22px; top: 25px; right: 20%; animation: blink 2s infinite alternate; }
+
+        @keyframes floatBouquet {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1.5deg); }
+        }
+
+        @keyframes pulseBloom {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.08) rotate(3deg); }
+        }
+
+        @keyframes floatTulip {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes floatSunflower {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* --- Animasi Bunga Berjatuhan --- */
+        .falling-flower {
+            position: fixed;
+            top: -50px;
+            z-index: 1;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0.2;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Tombol On/Off Musik -->
+<button class="music-control" onclick="toggleMusic()">🎵</button>
+
+<!-- Elemen Pemutar Musik Latar Belakang -->
+<audio id="bgMusic" loop>
+    <source src="https://files.catbox.moe/lggo3z.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+    <!-- SCREEN 1: PASSCODE -->
+    <div id="pinScreen" class="screen active">
+        <h2>For You, My Love</h2>
+        <p>Masukkan PIN Tanggal Spesial (DDMM)</p>
+        <div class="pin-box">
+            <input type="password" id="pinInput" maxlength="4" placeholder="••••">
+            <br>
+            <button class="btn" onclick="checkPin()">Buka</button>
+        </div>
+        <p id="pinError" style="color: red; font-size: 12px; display: none;">PIN Salah! Coba lagi.</p>
+    </div>
+
+    <!-- SCREEN 2: GIFT BOX -->
+    <div id="giftScreen" class="screen">
+        <h2>Ada Hadiah Untukmu! 🎁</h2>
+        <p>Ketuk kado di bawah untuk membukanya</p>
+        <div class="gift-box" onclick="openGift()">🎁</div>
+    </div>
+
+    <!-- SCREEN 3: MAIN CONTENT -->
+    <div id="mainScreen" class="screen">
+        <h1>Happy Birthday Asha! 🌸</h1>
+        <p>Semoga harimu selalu indah dan penuh kebahagiaan sayangku.</p>
+
+        <hr style="border-color: var(--accent-pink); opacity: 0.3;">
+
+        <!-- Digital Bouquet -->
+        <h3>A Digital Bouquet 💐</h3>
+        <p style="font-size: 12px;">Ketuk setiap bunga untuk melihat pesannya:</p>
+        <div class="flower-container">
+            <span class="flower" onclick="showMessage('🌹 Mawar ga pernah minta dipuji cantik untuk mekarnya, sama seperti kamu yang indah dengan caramu sendiri.')">🌹</span>
+            <span class="flower" onclick="showMessage('🌻 Seperti bunga matahari, kamu selalu membawa kehangatan.')">🌻</span>
+            <span class="flower" onclick="showMessage('🌸 Cantik dan lembut seperti bunga sakura, menghiasi kehidupanku.')">🌸</span>
+        </div>
+        <div id="flowerMsg" class="flower-message">Pilih bunga di atas...</div>
+
+        <!-- Letter Section -->
+        <div class="letter">
+            <h3 style="margin-top:0; text-align:center;">A Letter For You 💌</h3>
+            <p>Selamat ulang tahun, sayang! Jujur, bisa ketemu kamu itu salah satu hal terbaik yang pernah hadir di hidup aku. Makasih ya udah melengkapi bagian yang kurang dan selalu jadi alasan aku merasa cukup.</p>
+            <p>Di umur yang baru ini, aku cuma mau kamu bahagia, semua impian kamu pelan-pelan kecapai, dan kamu ga pernah merasa sendirian karena bakal ada aku yang selalu siap nemenin dan dukung kamu dalam keadaan apa pun. Semoga kamu selalu dikelilingi orang-orang baik ya sayang, selalu dilancarkan rezekinya, dan diberi kesehatan.</p>
+            <p>Happy birthday! Let’s make even more wonderful memories together.</p>
+            <p style="text-align: right; font-weight: bold;">— K . Reidern 💖</p>
+        </div>
+
+        <!-- Photo Memories -->
+        <h3>Our Photo Memories 📸</h3>
+        <div class="polaroid-frame">
+            <img src="https://i.ibb.co.com/W429J8BV/Foto1.jpg" alt="Foto1">
+            <p>Ada bunga yang indah karena warnanya, tapi kalo kamu, indah dengan jadi diri sendiri.✨</p>
+        </div>
+        <div class="polaroid-frame">
+            <img src="https://i.ibb.co.com/wN0FTN0S/Foto2.jpg" alt="Foto2">
+            <p>You're truly the best thing that ever happened to me.</p>
+        </div>
+        <div class="polaroid-frame">
+            <img src="https://i.ibb.co.com/vvYzX57K/Foto3.jpg" alt="Foto3">
+            <p>Special Cake For You.</p>
+        </div>
+        <div class="polaroid-frame">
+            <img src="https://i.ibb.co.com/2DyFNbb/Foto4.jpg" alt="Foto4">
+            <p>Even the most ordinary things feel special when I'm with you.</p>
+        </div>
+
+        <!-- Reasons Jar -->
+        <div class="jar-box">
+            <3>Jar of Gratitude 🫙</h3>
+            <p id="jarNote" style="font-style: italic;">Kocok stoples untuk mengambil pesan!</p>
+            <button class="btn" onclick="shakeJar()">Kocok Stoples 🫙</button>
+        </div>
+
+        <!-- Buket Bunga Besar -->
+        <div class="bouquet-wrapper">
+            <span class="sparkle-1">✨</span>
+            <span class="sparkle-2">💖</span>
+            <div class="large-bouquet">
+                <span class="flower-item tulip-1" title="Tulip">🌷</span>
+                <span class="flower-item tulip-2" title="Tulip">🌷</span>
+                
+                <span class="flower-item sunflower-1" title="Bunga Matahari">🌻</span>
+                <span class="flower-item sunflower-2" title="Bunga Matahari">🌻</span>
+                
+                <span class="flower-item rose-1" title="Mawar">🌹</span>
+                <span class="flower-item rose-2" title="Mawar">🌹</span>
+                <span class="flower-item rose-main" title="Mawar Merah Utama">🌹</span>
+
+                <div class="bouquet-wrap">🎀</div>
+            </div>
+            <p style="font-size: 13px; font-weight: 500; color: var(--accent-pink); margin-top: 5px;">
+                For Asha Cantikku. 🌹🌷🌻
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CORRECT_PIN = "0209"; 
+    const bgMusic = document.getElementById('bgMusic');
+
+    const notes = [
+        "Jangan sering ngambek ya ntik!",
+        "Kalau mau nangis, I'm here sayangku.",
+        "Your smile always manages to turn a chaotic day into a peaceful one.",
+        "I Love You 3000 Sha!"
+    ];
+
+    // Otomatis jalankan efek hujan bunga begitu web pertama kali dibuka
+    window.addEventListener('DOMContentLoaded', () => {
+        startFlowerRain();
+    });
+
+    function checkPin() {
+        const input = document.getElementById('pinInput').value;
+        if(input === CORRECT_PIN) {
+            document.getElementById('pinScreen').classList.remove('active');
+            document.getElementById('giftScreen').classList.add('active');
+            bgMusic.play().catch(err => console.log("Autoplay dicegah browser"));
+        } else {
+            document.getElementById('pinError').style.display = 'block';
+        }
+    }
+
+    function openGift() {
+        document.getElementById('giftScreen').classList.remove('active');
+        document.getElementById('mainScreen').classList.add('active');
+        bgMusic.play().catch(err => console.log("Autoplay dicegah browser"));
+    }
+
+    function toggleMusic() {
+        if (bgMusic.paused) {
+            bgMusic.play();
+        } else {
+            bgMusic.pause();
+        }
+    }
+
+    function showMessage(msg) {
+        document.getElementById('flowerMsg').innerText = msg;
+    }
+
+    function shakeJar() {
+        const randomIndex = Math.floor(Math.random() * notes.length);
+        document.getElementById('jarNote').innerText = `"${notes[randomIndex]}"`;
+    }
+
+    /* Fungsi Hujan Bunga Berjatuhan */
+    let rainInterval = null;
+    function startFlowerRain() {
+        if (rainInterval) return; 
+        const flowers = ['🌸', '💮', '🌹', '🌻', '🌷', '✨'];
+        
+        rainInterval = setInterval(() => {
+            const flower = document.createElement('div');
+            flower.classList.add('falling-flower');
+            flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            
+            flower.style.left = (Math.random() * 90) + 'vw'; 
+            flower.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            flower.style.animationDuration = (Math.random() * 3 + 3) + 's'; 
+            
+            document.body.appendChild(flower);
+
+            setTimeout(() => {
+                flower.remove();
+            }, 6000);
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
